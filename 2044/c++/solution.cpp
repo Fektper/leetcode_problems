@@ -1,8 +1,6 @@
 #include <vector>
 #include <stdio.h>
 
-#define MAX_BINARY_DIGIT 16 // floor(log2(10^5))
-
 using namespace std;
 class Solution {
 public:
