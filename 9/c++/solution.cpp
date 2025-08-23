@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <vector>
 
 using namespace std;
 
@@ -9,17 +8,21 @@ public:
         if (x < 0){
             return false;
         }
-
-        vector<int> digits(0);
-        while (x > 0){
-            digits.push_back(x % 10);
-            x = x /10;
+        if (x == 0){
+            return true;
         }
 
-        int digi_num = digits.size();
+        int digits[32];
+        int total_digit_count = 0;
 
-        for (int i = 0; i < digi_num / 2; i++){
-            if (digits.at(i) != digits.at(digi_num - 1 - i)){
+        while (x > 0){
+            digits[total_digit_count] = x % 10;
+            x = x /10;
+            total_digit_count++;
+        }
+
+        for (int i = 0; i < total_digit_count / 2; i++){
+            if (digits[i] != digits[total_digit_count - 1 - i]){
                 return false;
             }
         }
