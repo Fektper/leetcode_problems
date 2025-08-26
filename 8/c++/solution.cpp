@@ -1,45 +1,77 @@
 #include <string>
+#include <vector>
 #include <stdio.h>
 
 using namespace std;
 
 bool isDigit(char c){
-    if (c >= 48 && c <= 57){
-        return true;
-    }
-    return false;
+    return c - '0' >= 0 && c - '9' <= 0;
 }
 
-int getDigit(char c){ // Required that c is valid digit
-    return (int)(c - 48);
+int getDigit(char c){
+    return c - '0'; // Assumes valid digit char
 }
 
-class Solution {
-public:
-    int myAtoi(string s) {
+
+class Solution{
+    public:
+    int myAtoi(string s){
+        vector<int> valid_digits(0);
         int sign = 1;
-        string valid_chars = "";
-        int start_index = 0;
-        while(start_index < s.size() && s[start_index] == ' '){
-            start_index++;
+
+        int idx = 0;
+
+        while (idx < s.size() && s[idx] == ' '){
+            idx++;
         }
-        if (start_index == s.size()){
+        if (idx == s.size()){
             return 0;
         }
-        if (s[start_index] == '+'){
+        else if (s[idx] == '+'){
             sign = 1;
-        } else if (s[start_index] == '-'){
+            idx++;
+        }
+        else if (s[idx] == '-'){
             sign = -1;
-        } else if (!isDigit(s[start_index])){
+            idx++;
+        }
+        else if(!isDigit(s[idx])){
             return 0;
         }
-        return 5;
-    }
+
+        // We have sign, next char is definetly a digit, we are not at end
+        // Skip leading zeros
+        while (idx < s.size() && isDigit(s[idx]) && getDigit(s[idx]) == 0){
+            idx++;
+        }
+        // Read digits till end or till invalid digit
+        while (idx < s.size() && isDigit(s[idx])){
+            valid_digits.push_back(getDigit(s[idx]));
+            idx++;
+        }
+
+        if (valid_digits.size() > 10){
+            return sign == 1 ? INT32_MAX : INT32_MIN;
+        }
+
+        int result = 0;
+        int previous_result = result;
+        for (int i: valid_digits){
+            previous_result = result;
+            result = result*10;
+            result += sign*i;
+
+            if (previous_result * sign > result*sign){ // Check overflow
+                return sign == 1 ? INT32_MAX : INT32_MIN;
+            }
+        }
+        return result;
+    };
 };
 
 
 int main(){
-    string test_input = "   -000043 hello world";
+    string test_input = "-2147483649";
     int target_result = -43;
 
     Solution solver = Solution();
