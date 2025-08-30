@@ -1,7 +1,4 @@
-#include <vector>
 #include <limits.h>
-
-using namespace std;
 
 class Solution {
 public:
@@ -16,36 +13,25 @@ public:
         }
 
         // x is positive or zero
-        vector<int> digits(0);
+        bool leading = true;
         int this_digit;
+        int result = 0;
         while (x > 0){
             this_digit = x % 10;
-            digits.push_back(this_digit);
             x = x/10;
-        }
+            
+            if (leading && this_digit == 0){
+                continue;
+            }
 
-        int ptr = 0;
-        // Skip leading zeros
-        while (ptr < digits.size() && digits[ptr] == 0){
-            ptr++;
-        }
-        // Skip 0;
-        if (ptr == digits.size()){
-            return 0;
-        }
-        int result = 0;
-        while (ptr < digits.size()){
-            this_digit = digits[ptr];
-
+            leading = false;
             if ((INT_MAX - this_digit) / 10 < result){
                 return 0;
             }
             result *= 10;
             result += this_digit;
-            ptr++;
         }
 
         return sign * result;
-
     }
 };
