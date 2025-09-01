@@ -1,38 +1,42 @@
 #include <vector>
-
+#include <queue>
+#include <tuple>
 
 using namespace std;
 
-int maxIndex(vector<double>& vals){
-    int idx = 0;
-    double maxVal = vals[0];
-
-    for (int i = 1; i < vals.size(); i++){
-        if (vals[i] > maxVal){
-            maxVal = vals[i];
-            idx = i;
-        }
+class Compare{
+public:
+    bool operator() (tuple<int, double> a, tuple<int, double> b){
+        return get<1>(a) < get<1>(b);
     }
-    return idx;
-}
+};
 
 class Solution {
 public:
     double maxAverageRatio(vector<vector<int>>& classes, int extraStudents) {
+        
+        priority_queue<tuple<int, double>, vector<tuple<int, double>>, Compare> gains;
 
-        vector<double> gains(classes.size());
-
+        double gain;
         for (int i = 0; i < classes.size(); i++){
-            gains[i] = ((double) classes[i][0] + 1) / ((double) classes[i][1] + 1) - ((double) classes[i][0]) / ((double) classes[i][1]);
+            gain = ((double) classes[i][0] + 1) / ((double) classes[i][1] + 1) - ((double) classes[i][0]) / ((double) classes[i][1]);
+            gains.push({i, gain});
         }
 
+        tuple<int, double> current;
         int i;
+        double new_gain;
         while (extraStudents > 0){
-            i = maxIndex(gains);
+            current = gains.top();
+            gains.pop();
+
+            i = get<0>(current);
             classes[i][0]++;
             classes[i][1]++;
+            new_gain = ((double) classes[i][0] + 1) / ((double) classes[i][1] + 1) - ((double) classes[i][0]) / ((double) classes[i][1]);
+            
+            gains.push({i, new_gain});
             extraStudents--;
-            gains[i] = ((double) classes[i][0] + 1) / ((double) classes[i][1] + 1) - ((double) classes[i][0]) / ((double) classes[i][1]);
         }
 
         double res = 0;
