@@ -3,24 +3,6 @@
 
 using namespace std;
 
-bool binarySearch(vector<int>& nums, int target, int start, int end){
-    int current_idx;
-    while (end > start){
-        current_idx = (end + start) / 2;
-        if (nums[current_idx] == target){
-            return true;
-        }
-        else if (nums[current_idx] < target){
-            start = current_idx + 1;
-            continue;
-        }
-        else {
-            end = current_idx;
-        }
-    }
-    return nums.size() > start ? (nums[start] == target) : false;
-}
-
 class Solution {
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
@@ -31,6 +13,8 @@ public:
         int previous_i = nums[0] - 1;
         int previous_j = previous_i;
 
+        int j; int k; int target;
+
         for (int i = 0; i < nums.size()-2; i++){
             if (nums [i] > 0){
                 break;
@@ -39,14 +23,31 @@ public:
                 continue;
             }
 
-            for (int j = i+1; j < nums.size()-1; j++){
+            j = i+1;
+            k = nums.size() - 1;
+            target = -nums[i];
+            previous_j = previous_i;
+            while(k > j){
                 if (nums[j] == previous_j){
+                    j++;
                     continue;
                 }
-                if (binarySearch(nums, -nums[i] - nums[j],j+1, nums.size() - 1)){
-                    solution.push_back({nums[i], nums[j], -nums[i] - nums[j]});
+                
+                if (nums[j] + nums[k] == target){
+                    solution.push_back({nums[i], nums[j], nums[k]});
+                    previous_j = nums[j];
+                    j++;
+                    k--;
+                    continue;
                 }
-                previous_j = nums[j];
+                else if(nums[j] + nums[k] < target){
+                    j++;
+                    continue;
+                }
+                else{
+                    k--;
+                    continue;
+                }
             }
             previous_i = nums[i];
         }
@@ -55,7 +56,7 @@ public:
 };
 
 int main(){
-    vector<int> nums = {-1,0,1,2,-1,-4};
+    vector<int> nums = {2,-3,0,-2,-5,-5,-4,1,2,-2,2,0,2,-4,5,5,-10};
 
     Solution solver = Solution();
     solver.threeSum(nums);
