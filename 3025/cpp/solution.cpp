@@ -7,7 +7,7 @@ using namespace std;
 class Solution {
 public:
     int numberOfPairs(vector<vector<int>>& points) {
-        std::stable_sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[1] > b[1];}); // Sort by decreasing height
+        std::sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[1] > b[1];}); // Sort by decreasing height
         int min_height = points[points.size()-1][1];
         std::stable_sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[0] < b[0];}); // Then sort by increasing x. 
         // Points are sorted in a way that if they have same x position, higher one comes first -> optimal
