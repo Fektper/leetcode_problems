@@ -28,6 +28,9 @@ public:
                 }
                 running_max_height_below_a = b_y;
                 count++;
+                if (b_y == a_y){
+                    break;
+                }
             }
         }
         return count;
