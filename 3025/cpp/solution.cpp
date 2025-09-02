@@ -7,30 +7,27 @@ using namespace std;
 class Solution {
 public:
     int numberOfPairs(vector<vector<int>>& points) {
-        std::sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[1] > b[1];}); // Sort by decreasing height
-        int min_height = points[points.size()-1][1];
-        std::stable_sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[0] < b[0];}); // Then sort by increasing x. 
+        std::sort(points.begin(), points.end(), [](const vector<int>& a, const vector<int>& b){return a[0] == b[0] ? a[1] > b[1] : a[0] < b[0];});
         // Points are sorted in a way that if they have same x position, higher one comes first -> optimal
         int count = 0;
         int running_max_height_below_a;
-        int a_y;
-        int b_y;
+        int min_height = -1; // all points are in [0, 50]
         for (int i = 0; i < points.size() - 1; i++){
-            a_y = points[i][1];
-            running_max_height_below_a = min_height - 1;
+            running_max_height_below_a = min_height;
             for (int j = i+1; j < points.size(); j++){
-                b_y = points[j][1];
-                if (b_y > a_y){
-                    continue;
-                }
-                if (running_max_height_below_a >= b_y){
-                    continue;
-                }
-                running_max_height_below_a = b_y;
-                count++;
-                if (b_y == a_y){
+                if (points[j][1] == points[i][1]){
+                    count++;
                     break;
                 }
+                if (points[j][1] > points[i][1]){
+                    continue;
+                }
+                if (running_max_height_below_a >= points[j][1]){
+                    continue;
+                }
+                running_max_height_below_a = points[j][1];
+                count++;
+                
             }
         }
         return count;
