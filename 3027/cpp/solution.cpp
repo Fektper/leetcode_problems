@@ -12,7 +12,8 @@ public:
         int count = 0;
         int running_max_height_below_a;
         int min_height = -1000000001; // all points are in [-10^9, 10^9]
-        for (int i = 0; i < points.size() - 1; i++){
+        int n = points.size();
+        for (int i = 0; i < n - 1; i++){
             running_max_height_below_a = min_height;
             for (int j = i+1; j < points.size(); j++){
                 if (points[j][1] == points[i][1]){
@@ -25,8 +26,10 @@ public:
                 if (running_max_height_below_a >= points[j][1]){
                     continue;
                 }
-                running_max_height_below_a = points[j][1];
-                count++;
+                else{
+                    running_max_height_below_a = points[j][1];
+                    count++;
+                }
             }
         }
         return count;
