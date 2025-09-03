@@ -38,7 +38,7 @@ public:
             if (get<0>(first) + get<0>(second) > target){
                 high_elements.pop();
             }
-            else if (get<0>(first) + get<0>(second) > target){
+            else if (get<0>(first) + get<0>(second) < target){
                 low_elements.pop();
             }
             else if (get<1>(first) == get<1>(second)){
