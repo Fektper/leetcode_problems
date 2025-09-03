@@ -15,7 +15,7 @@ public:
         int n = points.size();
         for (int i = 0; i < n - 1; i++){
             running_max_height_below_a = min_height;
-            for (int j = i+1; j < points.size(); j++){
+            for (int j = i+1; j < n; j++){
                 if (points[j][1] == points[i][1]){
                     count++;
                     break;
