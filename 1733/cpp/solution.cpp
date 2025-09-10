@@ -60,14 +60,18 @@ public:
             }
         }
 
+        // for (int i = 0; i < friendGroups.size(); i++){
+        //     std::sort(friendGroups[i].begin(), friendGroups[i].end());
+        // }
+
         int minTeaching = __INT32_MAX__;
         int thisMinTeaching = 0;
         bool hasLearned[maxFriend];
         for (int langIdx = 0; langIdx < n; langIdx++){
             std::fill(hasLearned, hasLearned+maxFriend, false);
-
+            
             for (int pIdx = 0; pIdx < maxFriend; pIdx++){
-                if (contains(languages[pIdx], langIdx || hasLearned[pIdx])){
+                if (contains(languages[pIdx], langIdx+1) || hasLearned[pIdx]){
                     continue;
                 }
                 for (int fIdx: friendGroups[pIdx]){
