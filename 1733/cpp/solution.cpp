@@ -1,5 +1,4 @@
 #include <vector>
-#include <algorithm>
 #include <stdio.h>
 #include <unordered_set>
 
@@ -19,17 +18,7 @@ public:
     int minimumTeachings(int n, vector<vector<int>>& languages, vector<vector<int>>& friendships) {
         int m = languages.size();
 
-        vector<unordered_set<int>> friendGroups(m);
         vector<unordered_set<int>> languageSet(languages.size());
-
-        int f1; int f2;
-        for (vector<int> friendship: friendships){
-            f1 = friendship[0]-1;
-            f2 = friendship[1]-1;
-
-            friendGroups[f1].insert(f2);
-            friendGroups[f2].insert(f1);
-        }
 
         for (int i = 0; i < languages.size(); i++){
             for (int lang: languages[i]){
@@ -37,33 +26,29 @@ public:
             }
         }
 
-        int minTeaching = __INT32_MAX__;
-        unordered_set<int> hasLearned;
+        unordered_set<int> problems;
+        int f1; int f2;
+        for (vector<int> friendship: friendships){
+            f1 = friendship[0]-1;
+            f2 = friendship[1]-1;
+            if (!shareLanguage(languageSet[f1], languageSet[f2])){
+                problems.insert(f1);
+                problems.insert(f2);
+            }
+        }
 
+        int minCount = __INT32_MAX__;
+        int thisMinCount = 0;
         for (int langIdx = 0; langIdx < n; langIdx++){
-            hasLearned = {};
-
-            for (int pIdx = 0; pIdx < m; pIdx++){
-                if (languageSet[pIdx].find(langIdx) != languageSet[pIdx].end() || hasLearned.find(pIdx) != hasLearned.end()){
-                    continue;
-                }
-
-                for (int fIdx: friendGroups[pIdx]){
-                    if (!shareLanguage(languageSet[pIdx], languageSet[fIdx])){
-                        hasLearned.insert(pIdx);
-                        if (hasLearned.find(fIdx) != hasLearned.end()){
-                            continue;
-                        }
-                        else if (languageSet[fIdx].find(langIdx) == languageSet[fIdx].end()){
-                            hasLearned.insert(fIdx);
-                        }
-                    }
+            thisMinCount = 0;
+            for (int i: problems){
+                if (languageSet[i].find(langIdx) == languageSet[i].end()){
+                    thisMinCount++;
                 }
             }
-            minTeaching = std::min(minTeaching, (int) hasLearned.size());
+            minCount = std::min(minCount, thisMinCount);
         }
-        
-        return minTeaching;
+        return minCount;
     }
 };
 
