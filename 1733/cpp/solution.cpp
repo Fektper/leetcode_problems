@@ -60,9 +60,9 @@ public:
             }
         }
 
-        // for (int i = 0; i < friendGroups.size(); i++){
-        //     std::sort(friendGroups[i].begin(), friendGroups[i].end());
-        // }
+        for (int i = 0; i < friendGroups.size(); i++){
+            std::sort(friendGroups[i].begin(), friendGroups[i].end());
+        }
 
         int minTeaching = __INT32_MAX__;
         int thisMinTeaching = 0;
@@ -71,14 +71,14 @@ public:
             std::fill(hasLearned, hasLearned+maxFriend, false);
             
             for (int pIdx = 0; pIdx < maxFriend; pIdx++){
-                if (contains(languages[pIdx], langIdx+1) || hasLearned[pIdx]){
+                if (std::binary_search(languages[pIdx].begin(), languages[pIdx].end(), langIdx+1) || hasLearned[pIdx]){
                     continue;
                 }
                 for (int fIdx: friendGroups[pIdx]){
                     if (!shareLanguage(pIdx, fIdx, languages)){
-                        hasLearned[pIdx] = contains(languages[pIdx], langIdx+1) ? false : true;
-                        hasLearned[fIdx] = contains(languages[fIdx], langIdx+1) ? false : true;
-                    }
+                        hasLearned[pIdx] = true; // contains(languages[pIdx], langIdx+1) ? false : true;
+                        hasLearned[fIdx] = std::binary_search(languages[fIdx].begin(), languages[fIdx].end(), langIdx+1) ? false : true;
+                    } 
                 }
             }
             minTeaching = std::min(minTeaching, (int) count(hasLearned, hasLearned+maxFriend, true));
