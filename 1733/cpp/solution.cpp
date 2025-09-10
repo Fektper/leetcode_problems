@@ -1,89 +1,68 @@
 #include <vector>
 #include <algorithm>
 #include <stdio.h>
+#include <unordered_set>
 
 using namespace std;
 
-bool contains(vector<int>& arr, int val){
-    for (int ele: arr){
-        if (val == ele){
+bool shareLanguage(unordered_set<int>& l1s, unordered_set<int>& l2s){
+    for (int l1: l1s){
+        if (l2s.find(l1) != l2s.end()){
             return true;
         }
     }
     return false;
-}
-
-bool shareLanguage(int a, int b, vector<vector<int>>& languages){
-    int i = 0; int j = 0;
-    int l1; int l2;
-    while (i < languages[a].size() && j < languages[b].size()){
-        l1 = languages[a][i];
-        l2 = languages[b][j];
-        if (l1 == l2){
-            return true;
-        }
-        else if (l1 < l2){
-            i++;
-        }
-        else {
-            j++;
-        }
-    }
-    return false;
-    // for (int langA: languages[a]){
-    //     for (int langB: languages[b]){
-    //         if (langA == langB){
-    //             return true;
-    //         }
-    //     }
-    // }
-    // return false;
 }
 
 class Solution {
 public:
     int minimumTeachings(int n, vector<vector<int>>& languages, vector<vector<int>>& friendships) {
-        int maxFriend = languages.size();
-        vector<vector<int>> friendGroups(maxFriend);
-        for (int i = 0; i < maxFriend; i++){
-            std::sort(languages[i].begin(), languages[i].end());
-        }
+        int m = languages.size();
+
+        vector<unordered_set<int>> friendGroups(m);
+        vector<unordered_set<int>> languageSet(languages.size());
+
+        int f1; int f2;
         for (vector<int> friendship: friendships){
-            int f1 = friendship[0]-1;
-            int f2 = friendship[1]-1;
-            // Optimisable with hashmap!
-            if (!contains(friendGroups[f1], f2)){
-                friendGroups[f1].push_back(f2);
-            }
-            if (!contains(friendGroups[f2], f1)){
-                friendGroups[f2].push_back(f1);
-            }
+            f1 = friendship[0]-1;
+            f2 = friendship[1]-1;
+
+            friendGroups[f1].insert(f2);
+            friendGroups[f2].insert(f1);
         }
 
-        for (int i = 0; i < friendGroups.size(); i++){
-            std::sort(friendGroups[i].begin(), friendGroups[i].end());
+        for (int i = 0; i < languages.size(); i++){
+            for (int lang: languages[i]){
+                languageSet[i].insert(lang-1);
+            }
         }
 
         int minTeaching = __INT32_MAX__;
-        int thisMinTeaching = 0;
-        bool hasLearned[maxFriend];
+        unordered_set<int> hasLearned;
+
         for (int langIdx = 0; langIdx < n; langIdx++){
-            std::fill(hasLearned, hasLearned+maxFriend, false);
-            
-            for (int pIdx = 0; pIdx < maxFriend; pIdx++){
-                if (std::binary_search(languages[pIdx].begin(), languages[pIdx].end(), langIdx+1) || hasLearned[pIdx]){
+            hasLearned = {};
+
+            for (int pIdx = 0; pIdx < m; pIdx++){
+                if (languageSet[pIdx].find(langIdx) != languageSet[pIdx].end() || hasLearned.find(pIdx) != hasLearned.end()){
                     continue;
                 }
+
                 for (int fIdx: friendGroups[pIdx]){
-                    if (!shareLanguage(pIdx, fIdx, languages)){
-                        hasLearned[pIdx] = true; // contains(languages[pIdx], langIdx+1) ? false : true;
-                        hasLearned[fIdx] = std::binary_search(languages[fIdx].begin(), languages[fIdx].end(), langIdx+1) ? false : true;
-                    } 
+                    if (!shareLanguage(languageSet[pIdx], languageSet[fIdx])){
+                        hasLearned.insert(pIdx);
+                        if (hasLearned.find(fIdx) != hasLearned.end()){
+                            continue;
+                        }
+                        else if (languageSet[fIdx].find(langIdx) == languageSet[fIdx].end()){
+                            hasLearned.insert(fIdx);
+                        }
+                    }
                 }
             }
-            minTeaching = std::min(minTeaching, (int) count(hasLearned, hasLearned+maxFriend, true));
+            minTeaching = std::min(minTeaching, (int) hasLearned.size());
         }
-
+        
         return minTeaching;
     }
 };
