@@ -1,5 +1,8 @@
 #include <vector>
 
+#include <tuple>
+#include <queue>
+
 using namespace std;
 
 // 
@@ -12,38 +15,49 @@ struct ListNode {
     ListNode(int x, ListNode *next) : val(x), next(next) {}
 };
 
+class Greater{
+public:
+    bool operator() (tuple<int, int> a, tuple<int, int> b){
+        return get<0>(a) > get<0>(b);
+    }
+};
+
 class Solution {
 public:
     ListNode* mergeKLists(vector<ListNode*>& lists) {
         int k = lists.size();
 
-        int thisMinIndex;
-        int thisMinValue;
-        bool oneExists = true;
+        priority_queue<tuple<int, int>, vector<tuple<int, int>>, Greater> current_values;
+
+        for (int i = 0; i < k; i++){
+            if (lists[k]){
+                current_values.push({lists[k]->val, k});
+                lists[k] = lists[k]->next;
+            }
+        }
+
         ListNode* header = new ListNode();
         ListNode* current = header;
-        while (oneExists){
-            oneExists = false;
-            thisMinValue = __INT32_MAX__;
-            thisMinIndex = 0;
+        
+        tuple<int, int> currentSmallest;
+        int currentVal; int currentIndex;
+        while (!current_values.empty()){
+            currentSmallest = current_values.top();
+            current_values.pop();
 
-            for (int i = 0; i < k; i++){
-                if (lists[i]){
-                    oneExists = true;
-                    if (lists[i]->val < thisMinValue){
-                        thisMinValue = lists[i]->val;
-                        thisMinIndex = i;
-                    }
-                }
-            }
+            currentVal = get<0>(currentSmallest);
+            currentIndex = get<0>(currentSmallest);
 
-            if (oneExists){
-                current->next = new ListNode(thisMinValue);
-                current = current->next;
-                lists[thisMinIndex] = lists[thisMinIndex]->next;
+            current->next = new ListNode(currentVal);
+            current = current->next;
+
+            if (lists[currentIndex]){
+                current_values.push({lists[currentIndex]->val, currentIndex});
+                lists[currentIndex] = lists[currentIndex]->next;
             }
         }
 
         return header->next;
     }
 };
+
