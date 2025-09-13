@@ -2,13 +2,6 @@
 
 using namespace std;
 
-bool isVowl(char c){
-    if (c == 'a' || c == 'e' || c == 'i' || c=='o' || c == 'u'){
-        return true;
-    }
-    return false;
-}
-
 class Solution {
 public:
     int maxFreqSum(string s) {
@@ -21,8 +14,10 @@ public:
         int vowelMax = 0;
         int consonantMax = 0;
 
+        char c;
         for (int i = 0; i < 26; i++){
-            if (isVowl(i+97)){
+            c = i+97;
+            if (c == 'a' || c == 'e' || c == 'i' || c=='o' || c == 'u'){
                 vowelMax = std::max(vowelMax, counts[i]);
             }
             else{
