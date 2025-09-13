@@ -30,9 +30,9 @@ public:
         priority_queue<tuple<int, int>, vector<tuple<int, int>>, Greater> current_values;
 
         for (int i = 0; i < k; i++){
-            if (lists[k]){
-                current_values.push({lists[k]->val, k});
-                lists[k] = lists[k]->next;
+            if (lists[i]){
+                current_values.push({lists[i]->val, i});
+                lists[i] = lists[i]->next;
             }
         }
 
@@ -46,7 +46,7 @@ public:
             current_values.pop();
 
             currentVal = get<0>(currentSmallest);
-            currentIndex = get<0>(currentSmallest);
+            currentIndex = get<1>(currentSmallest);
 
             current->next = new ListNode(currentVal);
             current = current->next;
