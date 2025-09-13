@@ -1,6 +1,4 @@
 #include <string>
-#include <map>
-#include <unordered_map>
 
 using namespace std;
 
@@ -14,35 +12,22 @@ bool isVowl(char c){
 class Solution {
 public:
     int maxFreqSum(string s) {
-        unordered_map<char, int> consonant_counts;
-        unordered_map<char, int> vowel_counts;
+        int counts[26];
+        std::fill(counts, counts+sizeof(char)*26, 0);
 
         for (char c: s){
-            if (isVowl(c)){
-                auto a = vowel_counts.find(c);
-                if (a == vowel_counts.end()){
-                    vowel_counts.insert({c, 1});
-                } else{
-                    a->second = a->second + 1;
-                }
-            }
-
-            else{
-                auto a = consonant_counts.find(c);
-                if (a == consonant_counts.end()){
-                    consonant_counts.insert({c, 1});
-                } else{
-                    a->second = a->second + 1;
-                }
-            }
+            counts[c-97]++;
         }
         int vowelMax = 0;
         int consonantMax = 0;
-        for (auto cons: consonant_counts){
-            consonantMax = std::max(consonantMax, cons.second);
-        }
-        for (auto vowels: vowel_counts){
-            vowelMax = std::max(vowelMax, vowels.second);
+
+        for (int i = 0; i < 26; i++){
+            if (isVowl(i+97)){
+                vowelMax = std::max(vowelMax, counts[i]);
+            }
+            else{
+                consonantMax = std::max(consonantMax, counts[i]);
+            }
         }
         return consonantMax + vowelMax;
     }
