@@ -20,15 +20,28 @@ public:
 };
 
 long long int gcd_euclid(long long int a, long long int b){
+    int fac;
     while (a >1 && b > 1){
         if (a==b){
             return a;
         }
         if (a > b){ // Improvement: substract b as many times as necessary to make a <= b
-            a = a-b;
+            if (a > 2*b){
+                fac = a / b - 1;
+            }
+            else{
+                fac = 1;
+            }
+            a = a-fac*b;
         }
         else if (a < b){
-            b = b-a;
+            if (b > 2*a){
+                fac = b / a - 1;
+            }
+            else{
+                fac = 1;
+            }
+            b = b-fac*a;
         }
     }
     return 1;
