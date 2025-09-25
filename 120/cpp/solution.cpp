@@ -11,10 +11,10 @@ public:
         for (int row = 1; row < triangle.size(); row++){
             total_min = prev[0] + triangle[row][0];
 
-            vector<int> newPrev;
+            vector<int> newPrev(triangle[row].size());
             for (int col = 0; col < triangle[row].size(); col++){
                 current_min = triangle[row][col] + min(prev[min(col, (int) prev.size()-1)], prev[max(0, col-1)]);
-                newPrev.push_back(current_min);
+                newPrev[col] = current_min;
                 if (current_min < total_min){
                     total_min = current_min;
                 }
