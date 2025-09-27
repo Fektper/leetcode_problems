@@ -5,16 +5,20 @@
 using namespace std;
 
 double triangleArea(vector<int>& a, vector<int>& b, vector<int>& c){
-    double g = sqrt( pow((a[0] - b[0]), 2) + pow((a[1] - b[1]), 2) );
+    // Area = (1/2) * |x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2)|
 
-    vector<double> h_vec = {(double) a[1] - b[1], (double) b[0] - a[0]};
-    double h_vec_norm = sqrt(pow(h_vec[0], 2) + pow(h_vec[1], 2));
-    h_vec[0] = h_vec[0] / h_vec_norm;
-    h_vec[1] = h_vec[1] / h_vec_norm;
+    double A = 0.5 * abs(a[0] * (b[1] - c[1]) + b[0] * (c[1] - a[1]) + c[0] * (a[1]- b[1]));
+    return A;
+    // double g = sqrt( pow((a[0] - b[0]), 2) + pow((a[1] - b[1]), 2) );
 
-    double h = abs(h_vec[0] * (c[0]-a[0]) + h_vec[1] * (c[1]-a[1]));
+    // vector<double> h_vec = {(double) a[1] - b[1], (double) b[0] - a[0]};
+    // double h_vec_norm = sqrt(pow(h_vec[0], 2) + pow(h_vec[1], 2));
+    // h_vec[0] = h_vec[0] / h_vec_norm;
+    // h_vec[1] = h_vec[1] / h_vec_norm;
 
-    return g*h/2;
+    // double h = abs(h_vec[0] * (c[0]-a[0]) + h_vec[1] * (c[1]-a[1]));
+
+    // return g*h/2;
 }
 
 class Solution {
