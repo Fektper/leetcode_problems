@@ -8,35 +8,26 @@ class Solution {
 public:
     int triangleNumber(vector<int>& nums) {
         sort(nums.begin(), nums.end());
-        unordered_map<int, int> lastValidIndex;
+        // unordered_map<int, int> lastValidIndex;
         int resCount = 0;
 
-        int start = 0;
-        while (start < nums.size() && nums[start] == 0){
-            start++;
-        }
+        int left; int right;
+        for (int i = nums.size()-1; i > 1; i--){
+            left = 0;
+            right = i-1;
 
-        int greaterThan;
-        int lastIndex;
-        for (int i = start; i < ((int) nums.size()) -2; i++){
-            for (int j = i+1; j < ((int) nums.size()) - 1; j++){
-                greaterThan = nums[i] + nums[j] - 1;
-
-                if (lastValidIndex.find(greaterThan) != lastValidIndex.end()){
-                    lastIndex = lastValidIndex[greaterThan];
+            while (right > left){
+                if (nums[left] + nums[right] > nums[i]){
+                    resCount += right-left;
+                    right--;
                 }
                 else {
-                    lastIndex = (int) distance(nums.begin(), upper_bound(nums.begin(), nums.end(), greaterThan)) - 1;
-                   lastValidIndex[greaterThan] = lastIndex;
+                    left++;
                 }
-                resCount += lastIndex - j;
             }
         }
-        
-
 
         return resCount;
-
     }
 };
 
