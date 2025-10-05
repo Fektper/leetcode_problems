@@ -1,9 +1,10 @@
 #include <vector>
 #include <queue>
+#include <unordered_set>
 
 using namespace std;
 
-void searchConnections(vector<vector<int>> inits, vector<vector<int>>& heights, vector<vector<bool>>& map){
+void searchConnections(vector<vector<int>> inits, vector<vector<int>>& heights, vector<vector<bool>>& map, unordered_set<int>* candidates){
     int n = map[0].size();
     int m = map.size();
 
@@ -24,6 +25,9 @@ void searchConnections(vector<vector<int>> inits, vector<vector<int>>& heights, 
                 if (heights[ny][nx] >= heights[current[1]][current[0]] && !map[ny][nx]){
                     map[ny][nx] = true;
                     points.push({nx, ny});
+                    if (candidates != nullptr){
+                        candidates->insert(nx + ny*1000);
+                    }
                 }
             }
         }
@@ -38,6 +42,7 @@ public:
 
         vector<vector<bool>> toAtlantic(m, vector<bool>(n, false));
         vector<vector<bool>> toPacific(m, vector<bool>(n, false));
+        unordered_set<int> pacificCandidates;
 
         // Init
         for (int x = 0; x < n; x++){
@@ -54,25 +59,28 @@ public:
 
         for (int x = 0; x < n; x++){
             pacificStarts[x] = {x, 0};
+            pacificCandidates.insert(x);
             atlanticStarts[x] = {x, m-1};
         }
         for (int y = 0; y < m; y++){
             pacificStarts[n+y] = {0, y};
+            pacificCandidates.insert(y*1000);
             atlanticStarts[n+y] = {n-1, y};;
         }
 
-        searchConnections(pacificStarts, heights, toPacific);
-        searchConnections(atlanticStarts, heights, toAtlantic);
-
+        searchConnections(pacificStarts, heights, toPacific, &pacificCandidates);
+        searchConnections(atlanticStarts, heights, toAtlantic, nullptr);
 
         vector<vector<int>> result;
-        for (int x = 0; x < n; x++){
-            for (int y = 0; y < m; y++){
-                if (toAtlantic[y][x] && toPacific[y][x]){
-                    result.push_back({y, x});
-                }
+        int x; int y;
+        for (int d: pacificCandidates){
+            x = d % 1000;
+            y = d / 1000;
+            if (toAtlantic[y][x]){
+                result.push_back({y, x});
             }
         }
+
         return result;
     }
 };
