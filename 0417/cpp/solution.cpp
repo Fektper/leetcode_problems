@@ -49,15 +49,16 @@ public:
             toAtlantic[y][n-1] = true;
         }
 
-        vector<vector<int>> pacificStarts;
-        vector<vector<int>> atlanticStarts;
+        vector<vector<int>> pacificStarts(n+m); // 1 too much
+        vector<vector<int>> atlanticStarts(n+m);
+
         for (int x = 0; x < n; x++){
-            pacificStarts.push_back({x, 0});
-            atlanticStarts.push_back({x, m-1});
+            pacificStarts[x] = {x, 0};
+            atlanticStarts[x] = {x, m-1};
         }
         for (int y = 0; y < m; y++){
-            pacificStarts.push_back({0, y});
-            atlanticStarts.push_back({n-1, y});
+            pacificStarts[n+y] = {0, y};
+            atlanticStarts[n+y] = {n-1, y};;
         }
 
         searchConnections(pacificStarts, heights, toPacific);
