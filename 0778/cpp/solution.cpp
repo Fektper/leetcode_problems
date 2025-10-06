@@ -36,17 +36,18 @@ public:
             current = gridQueue.top();
             gridQueue.pop();
             current_height = max(current_height, current.height);
-            visited[current.y][current.x] = true;
+            
+
             for (vector<int> dir: dirs){
                 nx = current.x + dir[0];
                 ny = current.y + dir[1];
 
                 if (nx >= 0 && nx < n && ny >= 0 && ny < m && !visited[ny][nx]){
                     gridQueue.push({nx, ny, grid[ny][nx]});
+                    visited[ny][nx] = true;
                 }
             }
         }
-        return current_height;
-
+        return max(current_height, grid[m-1][n-1]);
     }
 };
