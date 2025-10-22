@@ -19,15 +19,20 @@ public:
         int max_freq = 0;
 
         auto candidate_iterator = candidate_numbers.begin();
-        upper_bound(nums.begin(), nums.end(), 5);
+
         int this_count;
         int in_range_count;
-        while (candidate_iterator != candidate_numbers.end()){
 
-            in_range_count = distance(lower_bound(nums.begin(), nums.end(), *candidate_iterator - k), 
-                                    upper_bound(nums.begin(), nums.end(), *candidate_iterator + k));
-            this_count = distance(lower_bound(nums.begin(), nums.end(), *candidate_iterator),
-                                    upper_bound(nums.begin(), nums.end(), *candidate_iterator));
+        vector<int>::iterator lowest;
+        vector<int>::iterator highest;
+
+        while (candidate_iterator != candidate_numbers.end()){
+            lowest = lower_bound(nums.begin(), nums.end(), *candidate_iterator - k);
+            highest = upper_bound(nums.begin(), nums.end(), *candidate_iterator + k);
+            in_range_count = distance(lowest, 
+                                    highest);
+            this_count = distance(lower_bound(lowest, highest, *candidate_iterator),
+                                    upper_bound(lowest, highest, *candidate_iterator));
 
             max_freq = max(max_freq, min(in_range_count - this_count, numOperations) + this_count);
             candidate_iterator = next(candidate_iterator);
