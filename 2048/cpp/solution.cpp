@@ -1,4 +1,5 @@
 #include <vector>
+#include <cmath>
 
 using namespace std;
 
@@ -9,6 +10,7 @@ public:
         int tmp;
         int i;
         bool balanced = false;
+        n++;
         while(true){
             digit_counts = {0,0,0,0,0,0,0,0,0,0};
             i = 0;
@@ -31,7 +33,11 @@ public:
                 return n;
             }
 
-            n++;
+            if (n / (int)pow(10, i-1) > i){
+                n = pow(10, i);
+            } else {
+                n++;
+            }
         }
     }
 };
