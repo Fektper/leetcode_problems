@@ -4,6 +4,9 @@ impl Solution {
     pub fn number_of_beams(bank: Vec<String>) -> i32 {
         let mut rows: Vec<i32> = Vec::new();
 
+        let mut prev = 0;
+        let mut res = 0;
+
         for row in bank{
             let mut count = 0;
             for c in row.chars(){
@@ -11,17 +14,10 @@ impl Solution {
                     count += 1;
                 }
             }
+            res += prev *count;
             if count > 0{
-                rows.push(count);
+                prev = count;
             }
-        }
-
-        let mut res = 0;
-        if rows.len() <= 1{
-            return 0;
-        }
-        for i in 0..rows.len()-1 {
-            res += rows[i] * rows[i+1];
         }
         return res;
     }
