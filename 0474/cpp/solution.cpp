@@ -4,24 +4,6 @@
 
 using namespace std;
 
-struct Sol{
-    int size;
-    int rem_0;
-    int rem_1;
-
-    bool operator==(const Sol& other) const{
-        return size == other.size && rem_0 == other.rem_0 && rem_1 == other.rem_1;
-    }
-};
-
-
-class SolHash{
-    public:
-    size_t operator() (const Sol& a) const{
-        return a.size + a.rem_1 * 1000 + a.rem_0 * 1000000;
-    }
-};
-
 class Solution {
 public:
     int findMaxForm(vector<string>& strs, int m, int n) {
@@ -71,7 +53,6 @@ public:
                 }
             }
         }
-
 
         return dp[strs.size()-1][m][n];
 
