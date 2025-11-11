@@ -25,55 +25,55 @@ class SolHash{
 class Solution {
 public:
     int findMaxForm(vector<string>& strs, int m, int n) {
-        vector<vector<int>> counts(strs.size());
-        int c_0; int c_1;
-        // Count 0's and 1's in each string
-        for (int i = 0; i < strs.size(); i++){
-            string s = strs[i];
-            c_0 = 0; c_1 = 0;
-            for (char c: s){
-                if (c=='0'){
-                    c_0++;
-                }
-                if (c=='1'){
-                    c_1++;
-                }
-            }
-            counts[i] = {c_0, c_1};
-        }
-
-        auto dp = vector<unordered_set<Sol, SolHash>>(strs.size());
-        // First is set size
-        // Second is array of possible solutions
-        // Third is individual solution: set size, remaining 0's, remaining 1's
-        // Each entry is valid!
-
-        // Init first entry
-        if (counts[0][0] <= m && counts[0][1] <= n){
-            dp[0] = {{0, m, n}, {1, m-counts[0][0], n - counts[0][1]}};
-        } else {
-            dp[0] = {{0, m, n}};
-        }
         
+        auto dp = vector<vector<vector<int>>>(strs.size(), vector<vector<int>>(m+1, vector<int>(n+1, 0)));
+        
+        // Init for 0
+        int count_0 = 0;
+        int count_1 = 0;
 
-        for (int i = 1; i < counts.size(); i++){
-            dp[i] = {};
-            for (Sol sol: dp[i-1]){
-                if (sol.rem_0 >= counts[i][0] && sol.rem_1 >= counts[i][1]){
-                    dp[i].insert({sol.size + 1, sol.rem_0 - counts[i][0], sol.rem_1 - counts[i][1]});
+        for (char c: strs[0]){
+            if (c == '0'){
+                count_0++;
+            } else{
+                count_1++;
+            }
+        }
+
+        for (int c_m = 0; c_m <= m; c_m++){
+            for (int c_n = 0; c_n <= n; c_n++){
+                if (c_m >= count_0 && c_n >= count_1){
+                    dp[0][c_m][c_n] = 1;
+                } else{
+                    dp[0][c_m][c_n] = 0;
                 }
-                dp[i].insert(sol);
             }
         }
 
-        // Find best of final sol
-        int res = 0;
-        for (auto sol: dp[counts.size() - 1]){
-            if (sol.size > res){
-                res = sol.size;
+        for (int i = 1; i < strs.size(); i++){
+            count_0 = 0;
+            count_1 = 0;
+            for (char c: strs[i]){
+                if (c == '0'){
+                    count_0++;
+                } else {
+                    count_1++;
+                }
+            }
+
+            for (int c_m = 0; c_m <= m; c_m++){
+                for (int c_n = 0; c_n <= n; c_n++){
+                    if (c_m >= count_0 && c_n >= count_1){
+                        dp[i][c_m][c_n] = max(dp[i-1][c_m][c_n], dp[i-1][c_m - count_0][c_n - count_1] +1);
+                    } else {
+                        dp[i][c_m][c_n] = dp[i-1][c_m][c_n];
+                    }
+                }
             }
         }
-        return res;
+
+
+        return dp[strs.size()-1][m][n];
 
     }
 };
