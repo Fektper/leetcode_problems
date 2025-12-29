@@ -1,19 +1,10 @@
 #include <vector>
 #include <string>
-#include <queue>
 #include <unordered_map>
 #include <unordered_set>
-#include <iostream>
 
 
 using namespace std;
-
-class StringSizeSort{
-    public:
-    bool operator() (string& a, string& b){
-        return a.size() > b.size();
-    }
-};
 
 
 vector<string> allPosibleStackings(string& row, unordered_map<string, vector<char>>& mappings){
@@ -59,15 +50,16 @@ public:
             }
         }
 
-        priority_queue<string, vector<string>, StringSizeSort> base_queue;
+        vector<string> base_queue;
+        // priority_queue<string, vector<string>, StringSizeSort> base_queue;
         unordered_set<string> checked;
-        base_queue.push(bottom);
+        base_queue.push_back(bottom);
 
         vector<string> new_rows = {};
 
         while (base_queue.size() > 0){
-            bottom = base_queue.top();
-            base_queue.pop();
+            bottom = base_queue[base_queue.size() - 1];
+            base_queue.pop_back();
             if (bottom.size() == 1){
                 return true;
             }
@@ -76,7 +68,7 @@ public:
             // std::cout << new_rows.size() << "\n";
             for (string row: new_rows){
                 if (checked.find(row) == checked.end()){
-                    base_queue.push(row);
+                    base_queue.push_back(row);
                     checked.insert(row);
                 }
                 
