@@ -45,10 +45,12 @@ bool rowCheck(vector<vector<int>>& grid, long long int grid_sum, int start, int 
             cum_sum += grid[row][j];
             if (cols > 1){
                 removals.insert(grid[row][j]);
-            } else {
-                removals = {grid[row][0], grid[start][0]};
             }
-            
+        }
+        if (cols == 1){
+            removals.clear();
+            removals.insert(grid[row][0]);
+            removals.insert(grid[start][0]);
         }
         if (isSolvable(removals, cum_sum, grid_sum)){
             return true;
@@ -81,9 +83,12 @@ bool colCheck(vector<vector<int>>& grid, long long int grid_sum, int start, int 
             cum_sum += grid[i][col];
             if (rows > 1){
                 removals.insert(grid[i][col]);
-            } else{
-                removals = {grid[0][col], grid[0][start]};
-            }
+            } 
+        }
+        if (rows == 1){
+            removals.clear();
+            removals.insert(grid[0][col]);
+            removals.insert(grid[0][start]);
         }
         if (isSolvable(removals, cum_sum, grid_sum)){
             return true;
