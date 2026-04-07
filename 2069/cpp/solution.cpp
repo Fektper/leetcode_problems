@@ -21,8 +21,29 @@ public:
     }
     
     void step(int num) {
-        for (int i = 0; i < num; i++){
-            this->singleStep();
+        int safe_steps;
+        while (num > 1){
+            singleStep();
+            num--;
+            if (this->dx == 0){
+                // Dir is in y
+                // y + n*dy >= 0
+                // y + d*dy < this->h
+                // n <= -y/dy
+                safe_steps = this->dy < 0 ? -this->y / this->dy : (this->h - this->y - 1);
+            }
+            else {
+                // x + n*dx >= 0
+                // -x/dx >= n
+                safe_steps = this->dx < 0 ? -this->x / this->dx : (this->w - this->x - 1);
+                // Dir is in x
+            }
+            safe_steps = min(num, safe_steps);
+            this->safeSteps(safe_steps);
+            num -= safe_steps;
+        }
+        if (num == 1){
+            singleStep();
         }
     }
     
@@ -58,6 +79,10 @@ private:
             this->x = nx;
             this->y = ny;
         }
+    }
+    void safeSteps(int n){
+        this->x = this->x + this->dx * n;
+        this->y = this->y + this->dy * n;
     }
 };
 
