@@ -45,12 +45,8 @@ public:
 };
 
 int main(){
-    vector<int> test = {1,3,1,1,2};// vector<int>(100000, 20);
+    vector<int> test = vector<int>(100000, 20);
     // 5, 0, 3, 3, 0
     Solution solver = Solution();
-    vector<long long int> res = solver.distance(test);
-    for (long long int v: res){
-        std::cout << v << ", ";
-    }
-    std::cout << std::endl;
+    
 }
