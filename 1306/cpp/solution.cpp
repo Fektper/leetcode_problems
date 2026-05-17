@@ -1,5 +1,5 @@
 #include <queue>
-#include <set>
+#include <unordered_set>
 
 using namespace std;
 
@@ -8,7 +8,7 @@ public:
     bool canReach(vector<int>& arr, int start) {
         int n = arr.size();
         queue<int> pos_queue;
-        set<int> seen;
+        unordered_set<int> seen;
 
         seen.insert(start);
         pos_queue.push(start);
