@@ -38,10 +38,10 @@ void insertWord(TrieNode& node, string& s, int depth, int maxDepth, int i){
 class Solution {
 public:
     vector<int> stringIndices(vector<string>& wordsContainer, vector<string>& wordsQuery) {
-        int maxDepth = __INT32_MAX__;
-        // for (string word: wordsQuery){
-        //     maxDepth = max(maxDepth, (int)word.size());
-        // }
+        int maxDepth = 0;
+        for (string word: wordsQuery){
+            maxDepth = max(maxDepth, (int)word.size());
+        }
         TrieNode rootNode;
         for (int i = 0; i < wordsContainer.size(); i++){
             string word = wordsContainer[i];
