@@ -5,10 +5,5 @@ impl Solution {
             return 0;
         }
         return n - 999;
-        if 
-
-        let mut res = 0;
-
-
     }
 }
