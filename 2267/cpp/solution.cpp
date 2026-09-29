@@ -46,6 +46,9 @@ public:
     bool hasValidPath(vector<vector<char>>& grid) {
         int rows = grid.size();
         int cols = grid[0].size();
+        if ((rows + cols -1) % 2 == 1) {
+            return false;
+        }
         vector<vector<vector<int>>> pathNums = vector<vector<vector<int>>>(rows, vector<vector<int>>(cols, vector<int>()));
         
         if (grid[0][0] == '('){
