@@ -2,24 +2,24 @@
 
 using namespace std;
 
-void combineVectorsWithAdd(vector<int>& a, vector<int>& b, vector<int>& res, int add){
+void combineVectorsWithAdd(vector<int>& a, vector<int>& b, vector<int>& res, int add, int max){
     int i = 0;
     int j = 0;
     while (i < a.size() && j < b.size()){
         if (a[i] < b[j]){
-            if (a[i] + add >= 0){
+            if (a[i] + add >= 0 && a[i] + add <= max){
                 res.push_back(a[i] + add);
             }
             i++;
         }
         else if (b[j] < a[i]){
-            if (b[j] + add >= 0){
+            if (b[j] + add >= 0 && b[j] + add <= max){
                 res.push_back(b[j] + add);
             }
             j++;
         }
         else {
-            if (a[i] + add >= 0){
+            if (a[i] + add >= 0 && a[i] + add <= max){
                 res.push_back(a[i] + add);
             }
             i++;
@@ -27,13 +27,13 @@ void combineVectorsWithAdd(vector<int>& a, vector<int>& b, vector<int>& res, int
         }
     }
     while (i < a.size()){
-        if (a[i] + add >= 0){
+        if (a[i] + add >= 0 && a[i] + add <= max){
             res.push_back(a[i] + add);
         }
         i++;
     }
     while (j < b.size()){
-        if (b[j] + add >= 0){
+        if (b[j] + add >= 0 && b[j] + add <= max){
             res.push_back(b[j] + add);
         }
         j++;
@@ -75,7 +75,7 @@ public:
 
         for (int row = 1; row < rows; row++){
             for (int col = 1; col < cols; col++){
-                combineVectorsWithAdd(pathNums[row-1][col], pathNums[row][col-1], pathNums[row][col], grid[row][col] == '(' ? 1 : -1);
+                combineVectorsWithAdd(pathNums[row-1][col], pathNums[row][col-1], pathNums[row][col], grid[row][col] == '(' ? 1 : -1, rows - row - 1 + cols - col - 1);
             }
         }
 
